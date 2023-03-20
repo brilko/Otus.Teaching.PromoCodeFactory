@@ -16,10 +16,10 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped(typeof(IRepository<Employee>), (x) => 
-                new InMemoryRepository<Employee>(FakeDataFactory.Employees));
-            services.AddScoped(typeof(IRepository<Role>), (x) => 
-                new InMemoryRepository<Role>(FakeDataFactory.Roles));
+            var employees = new InMemoryRepository<Employee>(FakeDataFactory.Employees);
+            services.AddScoped(typeof(IRepository<Employee>), (x) => employees);
+            var roles = new InMemoryRepository<Role>(FakeDataFactory.Roles);
+            services.AddScoped(typeof(IRepository<Role>), (x) => roles);
 
             services.AddOpenApiDocument(options =>
             {

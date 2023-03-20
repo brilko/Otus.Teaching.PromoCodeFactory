@@ -71,5 +71,60 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 
             return employeeModel;
         }
+
+        /// <summary>
+        /// Создать сотрудника
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<Guid>> PostEmployeeAsync(EmployeeCreate employee)
+        {
+            return await CreateEmployeeWithGuid(employee, Guid.NewGuid());
+        }
+
+        private async Task<Guid> CreateEmployeeWithGuid(EmployeeCreate employee, Guid id) {
+            var employeeDataBase = new Employee() {
+                Id = id,
+                Email = employee.Email,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Roles = new List<Role>(),
+                AppliedPromocodesCount = 0
+            };
+            id = await _employeeRepository.PostAsync(employeeDataBase);
+            return id;
+        }
+
+        /// <summary>
+        /// Удалить сотрудника
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<ActionResult<bool>> DeleteEmployeeAsync(Guid id)
+        {
+            var isSucces = await _employeeRepository.DeleteAsync(id);
+            return isSucces;
+        }
+
+        /// <summary>
+        /// Изменить данные сотрудника
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<ActionResult<EmployeeResponse>> UpdateEmployee(Guid id, EmployeeCreate employee) {
+            var isExist = await _employeeRepository.IsExistAsync(id);
+            if(!isExist) 
+                return NotFound();
+            var entity = await _employeeRepository.GetByIdAsync(id);
+            entity.Email = employee.Email;
+            entity.FirstName = employee.FirstName;
+            entity.LastName = employee.LastName;
+            await _employeeRepository.UpdateAsync(entity);
+            return await GetEmployeeByIdAsync(id);
+        }
     }
 }
