@@ -33,13 +33,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         {
             var employees = await _employeeRepository.GetAllAsync();
 
-            var employeesModelList = employees.Select(x => 
-                new EmployeeShortResponse()
-                    {
-                        Id = x.Id,
-                        Email = x.Email,
-                        FullName = x.FullName,
-                    }).ToList();
+            var mapper = EmployeeCoreToShortResponse.CreateMapper();
+
+            var employeesModelList = mapper.Map<List<EmployeeShortResponse>>(employees);
 
             return employeesModelList;
         }
@@ -55,19 +51,10 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 
             if (employee == null)
                 return NotFound();
-            
-            var employeeModel = new EmployeeResponse()
-            {
-                Id = employee.Id,
-                Email = employee.Email,
-                Roles = employee.Roles.Select(x => new RoleItemResponse()
-                {
-                    Name = x.Name,
-                    Description = x.Description
-                }).ToList(),
-                FullName = employee.FullName,
-                AppliedPromocodesCount = employee.AppliedPromocodesCount
-            };
+
+            var mapper = EmployeeCoreToResponse.CreateMapper();
+
+            var employeeModel = mapper.Map<Employee, EmployeeResponse>(employee);
 
             return employeeModel;
         }
@@ -84,14 +71,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         }
 
         private async Task<Guid> CreateEmployeeWithGuid(EmployeeCreate employee, Guid id) {
-            var employeeDataBase = new Employee() {
-                Id = id,
-                Email = employee.Email,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Roles = new List<Role>(),
-                AppliedPromocodesCount = 0
-            };
+            var mapper = EmployeeCreateToCore.CreateMapper();
+            var employeeDataBase = mapper.Map<Employee>(employee);
+            employeeDataBase.Id = id;     
             id = await _employeeRepository.PostAsync(employeeDataBase);
             return id;
         }
@@ -102,10 +84,14 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ActionResult<bool>> DeleteEmployeeAsync(Guid id)
+        public async Task<ActionResult> DeleteEmployeeAsync(Guid id)
         {
             var isSucces = await _employeeRepository.DeleteAsync(id);
-            return isSucces;
+            if (isSucces) {
+                return Ok();
+            } else {
+                return NotFound();
+            }
         }
 
         /// <summary>

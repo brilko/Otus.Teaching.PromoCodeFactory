@@ -31,13 +31,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         {
             var roles = await _rolesRepository.GetAllAsync();
 
-            var rolesModelList = roles.Select(x => 
-                new RoleItemResponse()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Description = x.Description
-                }).ToList();
+            var mapper = RoleCoreToItemResponse.CreateMapper();
+
+            var rolesModelList = mapper.Map<List<RoleItemResponse>>(roles);
 
             return rolesModelList;
         }
