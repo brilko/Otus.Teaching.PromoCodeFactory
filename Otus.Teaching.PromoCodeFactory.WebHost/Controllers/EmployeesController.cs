@@ -33,13 +33,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         {
             var employees = await _employeeRepository.GetAllAsync();
 
-            var employeesModelList = employees.Select(x => 
-                new EmployeeShortResponse()
-                    {
-                        Id = x.Id,
-                        Email = x.Email,
-                        FullName = x.FullName,
-                    }).ToList();
+            var mapper = EmployeeCoreToShortResponse.CreateMapper();
+
+            var employeesModelList = mapper.Map<List<EmployeeShortResponse>>(employees);
 
             return employeesModelList;
         }
@@ -55,21 +51,66 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 
             if (employee == null)
                 return NotFound();
-            
-            var employeeModel = new EmployeeResponse()
-            {
-                Id = employee.Id,
-                Email = employee.Email,
-                Roles = employee.Roles.Select(x => new RoleItemResponse()
-                {
-                    Name = x.Name,
-                    Description = x.Description
-                }).ToList(),
-                FullName = employee.FullName,
-                AppliedPromocodesCount = employee.AppliedPromocodesCount
-            };
+
+            var mapper = EmployeeCoreToResponse.CreateMapper();
+
+            var employeeModel = mapper.Map<Employee, EmployeeResponse>(employee);
 
             return employeeModel;
+        }
+
+        /// <summary>
+        /// Создать сотрудника
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<Guid>> PostEmployeeAsync(EmployeeCreate employee)
+        {
+            return await CreateEmployeeWithGuid(employee, Guid.NewGuid());
+        }
+
+        private async Task<Guid> CreateEmployeeWithGuid(EmployeeCreate employee, Guid id) {
+            var mapper = EmployeeCreateToCore.CreateMapper();
+            var employeeDataBase = mapper.Map<Employee>(employee);
+            employeeDataBase.Id = id;     
+            id = await _employeeRepository.PostAsync(employeeDataBase);
+            return id;
+        }
+
+        /// <summary>
+        /// Удалить сотрудника
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<ActionResult> DeleteEmployeeAsync(Guid id)
+        {
+            var isSucces = await _employeeRepository.DeleteAsync(id);
+            if (isSucces) {
+                return Ok();
+            } else {
+                return NotFound();
+            }
+        }
+
+        /// <summary>
+        /// Изменить данные сотрудника
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<ActionResult<EmployeeResponse>> UpdateEmployee(Guid id, EmployeeCreate employee) {
+            var isExist = await _employeeRepository.IsExistAsync(id);
+            if(!isExist) 
+                return NotFound();
+            var entity = await _employeeRepository.GetByIdAsync(id);
+            entity.Email = employee.Email;
+            entity.FirstName = employee.FirstName;
+            entity.LastName = employee.LastName;
+            await _employeeRepository.UpdateAsync(entity);
+            return await GetEmployeeByIdAsync(id);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
+using Otus.Teaching.PromoCodeFactory.WebHost.Models.Mappers;
+using System;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Models
 {
@@ -9,4 +11,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Models
 
         public string Description { get; set; }
     }
+
+    public class RoleCoreToItemResponse : BaseMapper<Role, RoleItemResponse> { }
 }
