@@ -7,10 +7,19 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
 {
     public static class Registrar
     {
-        public static void AddSqLiteDB(this IServiceCollection services, IConfiguration configuration)
+
+        public static IServiceCollection AddCustomServices(
+            this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSqLiteDB(configuration);
+            return services;
+        }
+
+        private static IServiceCollection AddSqLiteDB(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connectionString));
+            return services;
         }
     }
 }
