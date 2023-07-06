@@ -15,15 +15,20 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
 {
     public class Startup
     {
+
+        public Startup(IConfiguration configuration) 
+        { 
+            this.configuration = configuration;
+        }
+
+        private readonly IConfiguration configuration;
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
-            var connectionString = GetDBPAth();
-
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connectionString));
+            services.AddSqLiteDB(configuration);
 
             var employees = new InMemoryRepository<Employee>(FakeDataFactory.Employees);
             services.AddScoped<IRepository<Employee>>((x) => employees);
@@ -35,24 +40,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
                 options.Title = "PromoCode Factory API Doc";
                 options.Version = "1.0";
             });
-        }
-
-        public string GetDBPAth() 
-        {
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory());
-            builder.AddJsonFile("appsettings.json");
-            var config = builder.Build();
-            string connectionString = config.GetConnectionString("DefaultConnection");
-            return connectionString;
-        }
-
-        public DbContextOptions<ApplicationContext> GetDbOptions()
-        {
-            string dbPath = GetDBPAth();
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
-            DbContextOptions<ApplicationContext> options = optionsBuilder.UseSqlite(dbPath).Options;
-            return options;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
