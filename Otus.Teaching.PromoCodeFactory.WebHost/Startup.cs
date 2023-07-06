@@ -27,11 +27,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
 
             services.AddCustomServicesExtensionMethod(configuration);
 
-            var employees = new InMemoryRepository<Employee>(FakeDataFactory.Employees);
-            services.AddScoped<IRepository<Employee>>((x) => employees);
-            var roles = new InMemoryRepository<Role>(FakeDataFactory.Roles);
-            services.AddScoped<IRepository<Role>>((x) => roles);
-
             services.AddOpenApiDocument(options => {
                 options.Title = "PromoCode Factory API Doc";
                 options.Version = "1.0";
