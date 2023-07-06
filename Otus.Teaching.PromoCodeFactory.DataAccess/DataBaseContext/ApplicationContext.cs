@@ -11,6 +11,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.DataBaseContext
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
                 : base(options)
         {
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
