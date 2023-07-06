@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain;
 using Otus.Teaching.PromoCodeFactory.DataAccess.DataBaseContext;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
@@ -48,7 +45,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         }
 
 
-        private bool IsExist(Guid id, out T entity) 
+        private bool IsExist(Guid id, out T entity)
         {
             entity = entitySet.Find(id);
             return entity != null;

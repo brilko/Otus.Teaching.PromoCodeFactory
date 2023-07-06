@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 {
@@ -21,7 +20,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         {
             _rolesRepository = rolesRepository;
         }
-        
+
         /// <summary>
         /// Получить все доступные роли сотрудников
         /// </summary>

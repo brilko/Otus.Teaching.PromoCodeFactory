@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 {
@@ -23,7 +22,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         {
             _employeeRepository = employeeRepository;
         }
-        
+
         /// <summary>
         /// Получить данные всех сотрудников
         /// </summary>
@@ -39,7 +38,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 
             return employeesModelList;
         }
-        
+
         /// <summary>
         /// Получить данные сотрудника по Id
         /// </summary>
@@ -70,10 +69,11 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             return await CreateEmployeeWithGuid(employee, Guid.NewGuid());
         }
 
-        private async Task<Guid> CreateEmployeeWithGuid(EmployeeCreate employee, Guid id) {
+        private async Task<Guid> CreateEmployeeWithGuid(EmployeeCreate employee, Guid id)
+        {
             var mapper = EmployeeCreateToCore.CreateMapper();
             var employeeDataBase = mapper.Map<Employee>(employee);
-            employeeDataBase.Id = id;     
+            employeeDataBase.Id = id;
             id = await _employeeRepository.PostAsync(employeeDataBase);
             return id;
         }
@@ -101,9 +101,10 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         /// <param name="employee"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<EmployeeResponse>> UpdateEmployee(Guid id, EmployeeCreate employee) {
+        public async Task<ActionResult<EmployeeResponse>> UpdateEmployee(Guid id, EmployeeCreate employee)
+        {
             var isExist = await _employeeRepository.IsExistAsync(id);
-            if(!isExist) 
+            if (!isExist)
                 return NotFound();
             var entity = await _employeeRepository.GetByIdAsync(id);
             entity.Email = employee.Email;

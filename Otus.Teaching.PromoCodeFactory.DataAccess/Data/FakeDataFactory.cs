@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
 {
@@ -17,7 +17,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                 LastName = "Сергеев",
                 Roles = new List<Role>()
                 {
-                    Roles.FirstOrDefault(x => x.Name == "Admin")  
+                    Roles.FirstOrDefault(x => x.Name == "Admin")
                 },
                 AppliedPromocodesCount = 5
             },
@@ -29,7 +29,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                 LastName = "Андреев",
                 Roles = new List<Role>()
                 {
-                    Roles.FirstOrDefault(x => x.Name == "PartnerManager")  
+                    Roles.FirstOrDefault(x => x.Name == "PartnerManager")
                 },
                 AppliedPromocodesCount = 10
             },

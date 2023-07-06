@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Models.Mappers
 {

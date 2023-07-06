@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
+using Otus.Teaching.PromoCodeFactory.Core.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
-using Otus.Teaching.PromoCodeFactory.Core.Domain;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
 {
     public class InMemoryRepository<T>
         : IRepository<T>
-        where T: BaseEntity
+        where T : BaseEntity
     {
         protected List<T> Data { get; set; }
 
@@ -17,7 +17,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         {
             Data = data;
         }
-        
+
         public Task<IEnumerable<T>> GetAllAsync()
         {
             return Task.FromResult((IEnumerable<T>)Data);
@@ -40,16 +40,16 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
             if (indexOfEntity > -1) {
                 Data.RemoveAt(indexOfEntity);
                 return Task.FromResult(true);
-            } else { 
+            } else {
                 return Task.FromResult(false);
-            }  
+            }
         }
 
         public Task<bool> UpdateAsync(T entity)
         {
             var indexOfEntity = Data.FindIndex(e => e.Id == entity.Id);
             if (indexOfEntity > -1) {
-                Data[indexOfEntity]=entity;
+                Data[indexOfEntity] = entity;
                 return Task.FromResult(true);
             } else {
                 return Task.FromResult(false);
