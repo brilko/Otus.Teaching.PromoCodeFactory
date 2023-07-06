@@ -8,7 +8,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
     public static class Registrar
     {
 
-        public static IServiceCollection AddCustomServices(
+        public static IServiceCollection AddCustomServicesExtensionMethod(
             this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSqLiteDB(configuration);

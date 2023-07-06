@@ -25,7 +25,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
         {
             services.AddControllers();
 
-            services.AddCustomServices(configuration);
+            services.AddCustomServicesExtensionMethod(configuration);
 
             var employees = new InMemoryRepository<Employee>(FakeDataFactory.Employees);
             services.AddScoped<IRepository<Employee>>((x) => employees);
